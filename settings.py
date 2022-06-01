@@ -9,13 +9,13 @@ GAME_NAME = "TopGun_Fighter"
 SCREEN = pg.display.set_mode((WIDTH,HEIGTH))
 TITLE =  pg.display.set_caption(GAME_NAME)
 
-BACKGROUND_IMG = pg.transform.scale(pg.image.load(os.path.join('assets\images', 'bg55.png')), (WIDTH, HEIGTH))
+BACKGROUND_IMG = pg.transform.scale(pg.image.load(os.path.join('assets\images\bg', 'bg55.png')), (WIDTH, HEIGTH))
 # BACKGROUND_IMG = pg.transform.scale(pg.image.load(os.path.join('assets\images', 'bg6.png')), (WIDTH, HEIGTH))
 
 # ------------Planes settings----------------
 # Import Assets Planes
-AIR_FIGHTER_J1_IMG = pg.image.load(os.path.join('assets\images', 'Plane1.png'))
-AIR_FIGHTER_J2_IMG = pg.image.load(os.path.join('assets\images', 'Plane3.png'))
+AIR_FIGHTER_J1_IMG = pg.image.load(os.path.join('assets\images\planes', 'f-14.png'))
+AIR_FIGHTER_J2_IMG = pg.image.load(os.path.join('assets\images\planes', 'SU-57.png'))
 
 # Custom Width and heigth
 PLANE_WIDTH, PLANE_HEIGHT = 50, 70
