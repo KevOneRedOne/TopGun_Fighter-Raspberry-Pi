@@ -1,7 +1,9 @@
 import pygame as pg
 import os
 
-# ------------Game settings -----------------
+# ---------------------------------------------------------------------------                 
+#          ----------- GAME SETTINGS -----------------  
+# ---------------------------------------------------------------------------   
 WIDTH = 1024 # 16 * 64 / 32 * 32 / 64 * 16
 HEIGTH = 768 # 16 * 48 / 32 * 24 / 64 * 12
 FPS = 60
@@ -12,22 +14,35 @@ TITLE =  pg.display.set_caption(GAME_NAME)
 BACKGROUND_IMG = pg.transform.scale(pg.image.load(os.path.join('assets\images\wallpaper', 'bg55.png')), (WIDTH, HEIGTH))
 # BACKGROUND_IMG = pg.transform.scale(pg.image.load(os.path.join('assets\images', 'bg6.png')), (WIDTH, HEIGTH))
 
-# Font 
+#----------Font------------- 
 pg.font.init()
-# HEALTH_FONT = pg.font.Font('assets\\font\\TOP_GUN.ttf', 20)
+# MENU_FONT = pg.font.Font('assets\\font\\TOP_GUN.ttf', 100)
 HEALTH_FONT = pg.font.Font('assets\\font\\CarbonBlock.ttf',30)
+WINNER_FONT = pg.font.Font('assets\\font\\CarbonBlock.ttf',100)
 
 
+# -------Sound Effect------
+pg.mixer.init()
+# Game sound
+GAME_SOUND =  pg.mixer.Sound(os.path.join('assets\sound', 'DangerZone.mp3'))
+VICTORY_SOUND =  pg.mixer.Sound(os.path.join('assets\sound', 'greeting.mp3'))
 
-# ------------Planes settings----------------
+# Missile and bullet
+BULLET_FIRE_SOUND = pg.mixer.Sound(os.path.join('assets\sound', 'shoot.mp3'))
+BULLET_HIT_SOUND = pg.mixer.Sound(os.path.join('assets\sound', 'shoothit.mp3'))
+MISSILE_FIRE_SOUND = pg.mixer.Sound(os.path.join('assets\sound', 'missile.mp3'))
+MISSILE_HIT_SOUND = pg.mixer.Sound(os.path.join('assets\sound', 'missilehit.wav'))
+
+
+# ---------------------------------------------------------------------------                 
+#          ----------- PLANES SETTINGS -----------------  
+# ---------------------------------------------------------------------------   
 # Import Assets Planes
 AIR_FIGHTER_J1_IMG = pg.image.load(os.path.join('assets\images\planes', 'f-14.png'))
 AIR_FIGHTER_J2_IMG = pg.image.load(os.path.join('assets\images\planes', 'SU-57.png'))
 
-# Custom Width and heigth
-PLANE_WIDTH, PLANE_HEIGHT = 50, 70
-
-
+# Custom Width and heigth 
+PLANE_WIDTH, PLANE_HEIGHT = 80, 90
 
 # Rotation of the Image
 ROTATION_J1 = 270
@@ -54,8 +69,9 @@ PLANE_J2_HIT_BY_MISSILES = pg.USEREVENT + 5
 
 
 
-
-#------------Some Colors---------------------
+# ---------------------------------------------------------------------------                 
+#          ----------- COLOR SETTINGS -----------------  
+# ---------------------------------------------------------------------------   
 # RGB
 BLACK = (0,0,0)
 BLUE = (0,0,255)
