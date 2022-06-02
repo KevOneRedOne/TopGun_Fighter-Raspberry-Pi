@@ -151,42 +151,43 @@ def main():
                     bullet = pg.Rect(plane_J1.x + plane_J1.width, plane_J1.y + plane_J1.height//2 - 10, 10, 2)
                     J1_bullets.append(bullet)
                     BULLET_FIRE_SOUND.play()
-                    BULLET_FIRE_SOUND.set_volume(0.6)
+                    BULLET_FIRE_SOUND.set_volume(0.3)
                 if event.key == pg.K_LALT and len(J1_missiles) < MAX_MISSILES:
                     missile = pg.Rect(plane_J1.x-25 + plane_J1.width, plane_J1.y + plane_J1.height//2 - 30, 25, 4)
                     J1_missiles.append(missile)
                     MISSILE_FIRE_SOUND.play()
-                    MISSILE_FIRE_SOUND.set_volume(0.6)
+                    MISSILE_FIRE_SOUND.set_volume(0.3)
                     
                 if event.key == pg.K_RCTRL and len(J2_bullets) < MAX_BULLETS:
                     bullet = pg.Rect(plane_J2.x-40 + plane_J2.width, plane_J2.y + plane_J2.height//2 - 10, 10, 2)
                     J2_bullets.append(bullet)
                     BULLET_FIRE_SOUND.play()
-                    BULLET_FIRE_SOUND.set_volume(0.6)
+                    BULLET_FIRE_SOUND.set_volume(0.3)
                 if event.key == pg.K_RSHIFT and len(J2_missiles) < MAX_MISSILES:
                     missile = pg.Rect(plane_J2.x-25 + plane_J2.width, plane_J2.y + plane_J2.height//2 - 30, 25, 4)
                     J2_missiles.append(missile)
-                    MISSILE_FIRE_SOUND.set_volume(0.6)
+                    MISSILE_FIRE_SOUND.play()
+                    MISSILE_FIRE_SOUND.set_volume(0.3)
                            
             if event.type == PLANE_J1_HIT_BY_BULLETS:
                 J1_health -= 5
                 BULLET_HIT_SOUND.play()
-                BULLET_HIT_SOUND.set_volume(0.6)
+                BULLET_HIT_SOUND.set_volume(0.3)
                 
             if event.type == PLANE_J1_HIT_BY_MISSILES:
                 J1_health -= 15
                 MISSILE_HIT_SOUND.play()
-                MISSILE_HIT_SOUND.set_volume(0.6)
+                MISSILE_HIT_SOUND.set_volume(0.3)
                                
             if event.type == PLANE_J2_HIT_BY_BULLETS:               
                 J2_health -= 5
                 BULLET_HIT_SOUND.play()
-                BULLET_HIT_SOUND.set_volume(0.6)
+                BULLET_HIT_SOUND.set_volume(0.3)
                 
             if event.type == PLANE_J2_HIT_BY_MISSILES:               
                 J2_health -= 15
                 MISSILE_HIT_SOUND.play()
-                MISSILE_HIT_SOUND.set_volume(0.6)
+                MISSILE_HIT_SOUND.set_volume(0.3)
                 
                               
         winner_text =""                 
