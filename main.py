@@ -6,12 +6,8 @@
 # --------------------------------------------
 
 import pygame as pg
-import os
-import sys
 from settings import *
 
-
-    
 # ---------------------------------------------------------------------------                 
 #          ----------- Drawing of the game -----------------  
 # ---------------------------------------------------------------------------                 
@@ -122,7 +118,7 @@ def handle_missiles(J1_missiles, J2_missiles, plane_J1, plane_J2):
 # ---------------------------------------------------------------------------                 
                      
 def main():
-    GAME_SOUND.play()
+    GAME_SOUND.play(-1)
     GAME_SOUND.set_volume(0.3)
     
     plane_J1 = pg.Rect(100,350, PLANE_WIDTH, PLANE_HEIGHT)
