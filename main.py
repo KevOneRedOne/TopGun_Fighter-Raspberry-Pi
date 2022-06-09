@@ -1,247 +1,243 @@
 # --------------------------------------------
 # Author : KevOneRedOne
 # Game Development with Pygame - Using a Raspberry Pi as an arcade game
-#  
+# Game Name : TOPGUN_Fighter
 # Project Date : 16/05/2022 to 13/06/2022
 # --------------------------------------------
-
 import pygame as pg
+from aircraft_fighter import *
 from settings import *
+from utils import *
 
-# ---------------------------------------------------------------------------                 
-#          ----------- Drawing of the game -----------------  
-# ---------------------------------------------------------------------------                 
-                         
-def draw_windows(plane_J1, plane_J2, J1_bullets, J1_missiles, J2_bullets,J2_missiles, J1_health, J2_health):
-    # Draw Background
+# --------------------------------------------------------------              
+#        ----------- Drawing of the game -----------------  
+# --------------------------------------------------------------  
+# ------ Background ------
+def draw_bg(SCREEN):
     SCREEN.blit(BACKGROUND_IMG, (0,0))
-    # Draw Health 
-    J1_health_text = HEALTH_FONT.render("HEALTH : " + str(J1_health), 1, WHITE)
-    J2_health_text = HEALTH_FONT.render("HEALTH : " + str(J2_health), 1, WHITE)
-    SCREEN.blit(J1_health_text, (10, 10))
-    SCREEN.blit(J2_health_text, (WIDTH - J1_health_text.get_width()- 10, 10))
-    # Draw planes
-    SCREEN.blit(AIR_FIGHTER_J1, (plane_J1.x, plane_J1.y))
-    SCREEN.blit(AIR_FIGHTER_J2, (plane_J2.x, plane_J2.y))
-     
-    # Draw bullets
-    for bullet in J1_bullets:
-        pg.draw.rect(SCREEN, RED, bullet )     
-    for bullet in J2_bullets:
-        pg.draw.rect(SCREEN, BLUE, bullet )  
-          
-    # Draw missiles
-    for missile in J1_missiles:
-        pg.draw.rect(SCREEN, MAGENTA, missile)
-    for missile in J2_missiles:
-        pg.draw.rect(SCREEN, CYAN, missile)
- 
-    # Update the screen  
-    pg.display.update()
-    
-    
-def draw_winner(text):
-    draw_text = WINNER_FONT.render(text, 1, WHITE)
-    SCREEN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGTH/2 - draw_text.get_height()/2))
-    pg.display.update()
-    pg.time.delay(13000)
-    
-# ---------------------------------------------------------------------------                 
-#          ----------- J1 and J2 Movement -----------------  
-# ---------------------------------------------------------------------------                 
-                
-def J1_handle_movement(keys_pressed, plane_J1):
-    if keys_pressed[pg.K_q] and plane_J1.x - VELOCITY > 0 : #left
-        plane_J1.x -= VELOCITY   
-    if keys_pressed[pg.K_d] and plane_J1.x + VELOCITY + plane_J1.height < WIDTH : #right
-        plane_J1.x += VELOCITY   
-    if keys_pressed[pg.K_z] and plane_J1.y - VELOCITY > 0 : #up
-        plane_J1.y -= VELOCITY   
-    if keys_pressed[pg.K_s] and plane_J1.y + VELOCITY + plane_J1.width < HEIGTH : #down
-        plane_J1.y += VELOCITY  
+
+# ------ Health Bar ------
+def draw_health_bar(health, x, y):
+    ratio = health/100
+    pg.draw.rect(SCREEN, WHITE, (x-2, y-2, 204, 24))
+    pg.draw.rect(SCREEN, RED, (x, y, 200, 20))
+    pg.draw.rect(SCREEN, GREEN, (x, y, 200*ratio, 20))
+
+# ------ Draw text on the screen ------
+def draw_text(text, font, text_col, x, y):
+    texte_to_print = font.render(text, True, text_col)
+    SCREEN.blit(texte_to_print, (x,y))
+
+
+
+# --------------------------------------------------------------               
+#          ----------- J1 and J2 Movement ----------------  
+# --------------------------------------------------------------
+def J1_handle_movement(player1):
+    keys_pressed = pg.key.get_pressed()
+    player_moved = False
+    #--------- rotation left ------------
+    if keys_pressed[pg.K_q]: 
+        player1.rotate(left=True)
+    #--------- rotation right -----------    
+    if keys_pressed[pg.K_d]:  
+        player1.rotate(right=True)
         
-def J2_handle_movement(keys_pressed, plane_J2):
-    if keys_pressed[pg.K_LEFT] and plane_J2.x - VELOCITY > 0 : #left
-        plane_J2.x -= VELOCITY   
-    if keys_pressed[pg.K_RIGHT] and plane_J2.x + VELOCITY + plane_J2.height < WIDTH : #right
-        plane_J2.x += VELOCITY   
-    if keys_pressed[pg.K_UP] and plane_J2.y - VELOCITY > 0 : #up
-        plane_J2.y -= VELOCITY   
-    if keys_pressed[pg.K_DOWN] and plane_J2.y + VELOCITY + plane_J2.width < HEIGTH : #down
-        plane_J2.y += VELOCITY    
-
-# TO DO :
-# - Add the rotation left and right for planes   
-
-
+    #--------- PLAYER MOVE --------------
+    if keys_pressed[pg.K_z]:
+        player_moved=True
+        # collsion with map
+        if not player1.collide_map():
+            player1.move_forward()
+        elif player1.collide_map():
+            player1.step_back()  
+    #--------- PLAYER DOESN'T MOVE ---------- 
+    if not player_moved:
+        if not player1.collide_map():
+            player1.reduce_speed()
+        if player1.collide_map():
+            player1.step_back()
+        #--------IF PLAYER BLOCKED---------
+        if player1.collide_map() and pg.time.delay(2000):
+            player1.reset()
+            
+def J2_handle_movement(player2):
+    keys_pressed = pg.key.get_pressed()
+    player_moved = False
+    #--------- rotation left ------------
+    if keys_pressed[pg.K_LEFT]: 
+        player2.rotate(left=True)
+    #--------- rotation right -----------    
+    if keys_pressed[pg.K_RIGHT]:  
+        player2.rotate(right=True)
+        
+    #--------- PLAYER MOVE --------------
+    if keys_pressed[pg.K_UP]:
+        player_moved=True
+        # collsion with map
+        if not player2.collide_map():
+            player2.move_forward()
+        elif player2.collide_map():
+            player2.step_back()  
+    #--------- PLAYER DOESN'T MOVE ---------- 
+    if not player_moved:
+        if not player2.collide_map():
+            player2.reduce_speed()
+        if player2.collide_map():
+            player2.step_back()
+        #--------IF PLAYER BLOCKED---------
+        if player2.collide_map() and pg.time.delay(2000):
+            player2.reset()
         
 # ---------------------------------------------------------------------------                 
-#          -----------Bullets and Missiles collisions -----------------  
-# ---------------------------------------------------------------------------                 
-def handle_bullets(J1_bullets, J2_bullets, plane_J1, plane_J2):
+#          -----------Bullets/Missiles moves and collisions ------------  
+# ---------------------------------------------------------------------------    
+def handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, player2):           
+    # ------------------ Bullets J1 --------------------
     for bullet in J1_bullets:
-        bullet.x += BULLET_VELOCITY
-        if plane_J2.colliderect(bullet):
-            pg.event.post(pg.event.Event(PLANE_J2_HIT_BY_BULLETS))
+        bullet.move_weapons()
+        if bullet.rectangle.colliderect(player2.rect):
             J1_bullets.remove(bullet)
-        elif bullet.x > WIDTH :
+            #-------health and score--------
+            player2.health -= bullet.damage
+            player1.score += bullet.point
+        elif bullet.collide_map():
             J1_bullets.remove(bullet)
             
-    for bullet in J2_bullets:
-        bullet.x -= BULLET_VELOCITY
-        if plane_J1.colliderect(bullet):
-            pg.event.post(pg.event.Event(PLANE_J1_HIT_BY_BULLETS))
-            J2_bullets.remove(bullet)
-        elif bullet.x < 0 :
-            J2_bullets.remove(bullet)
-            
-def handle_missiles(J1_missiles, J2_missiles, plane_J1, plane_J2):
+    # ----------------- Missiles J1 --------------------
     for missile in J1_missiles:
-        missile.x += MISSILES_VELOCITY
-        if plane_J2.colliderect(missile):
-            pg.event.post(pg.event.Event(PLANE_J2_HIT_BY_MISSILES))
+        missile.move_weapons()
+        if missile.rectangle.colliderect(player2.rect):
             J1_missiles.remove(missile)
-        elif missile.x > WIDTH :
+            #-------health and score--------
+            player2.health -= missile.damage
+            player1.score += missile.point
+        elif missile.collide_map():
             J1_missiles.remove(missile)
-            
-    for missile in J2_missiles:
-        missile.x -= MISSILES_VELOCITY
-        if plane_J1.colliderect(missile):
-            pg.event.post(pg.event.Event(PLANE_J1_HIT_BY_MISSILES))
-            J2_missiles.remove(missile)
-        elif missile.x < 0 :
-            J2_missiles.remove(missile)
-            
-            
-# ---------------------------------------------------------------------------                 
-#           -----------------Main function --------------------------  
-# ---------------------------------------------------------------------------                 
-                     
-def main():
-    GAME_SOUND.play(-1)
-    GAME_SOUND.set_volume(0.3)
-    
-    plane_J1 = pg.Rect(100,350, PLANE_WIDTH, PLANE_HEIGHT)
-    plane_J2 = pg.Rect(848,350, PLANE_WIDTH, PLANE_HEIGHT)
-    
-    J1_health = 100
-    J2_health = 100
 
-    J1_bullets = []
-    J1_missiles= []
-    J2_bullets = []
-    J2_missiles = []
-    
+    # ------------------ Bullets J2 --------------------
+    for bullet in J2_bullets:
+        bullet.move_weapons()
+        if bullet.rectangle.colliderect(player1.rect):
+            J2_bullets.remove(bullet)
+            #-------health and score--------
+            player1.health -= bullet.damage
+            player2.score += bullet.point
+        elif bullet.collide_map():
+            J2_bullets.remove(bullet)
+            
+    # ----------------- Missiles J2 --------------------
+    for missile in J2_missiles:
+        missile.move_weapons()
+        if missile.rectangle.colliderect(player1.rect):
+            J2_missiles.remove(missile)
+            #-------health and score--------
+            player1.health -= missile.damage
+            player2.score += missile.point
+        elif missile.collide_map():
+            J2_missiles.remove(missile)
+
+
+# --------------------------------------------------------------             
+#       -----------------Main function -------------------  
+# -------------------------------------------------------------- 
+def main(): 
+    #------ Set framerate ----------
     clock = pg.time.Clock()
     playing = True
-    while playing :
+    # in_game = False
+    
+    # ---- Instantiation Player -----
+    player1 = Player1(4,5)
+    player2 = Player2(4,5)
+    
+    # ------ Bullet/Missile ---------
+    J1_bullets, J1_missiles = [] , []
+    J2_bullets, J2_missiles = [] , []
+    winner_text = ""
+    
+    while playing:
         clock.tick(FPS)
+        # while in_menu:
+        #     clock.tick(FPS)
+        # while in:
+        #     clock.tick(FPS)
+        # while in_game:
+            # clock.tick(FPS)
         for event in pg.event.get():
-            # Quit the Game
-            if event.type == pg.QUIT :
+            # Quit the game
+            if event.type == pg.QUIT:
                 playing = False
                 pg.quit()
             # Keyboard Event
-            if event.type == pg.KEYDOWN:    
-                if event.key == pg.K_LCTRL and len(J1_bullets) < MAX_BULLETS:
-                    bullet = pg.Rect(plane_J1.x + plane_J1.width, plane_J1.y + plane_J1.height//2 - 10, 10, 2)
-                    J1_bullets.append(bullet)
-                    BULLET_FIRE_SOUND.play()
-                    BULLET_FIRE_SOUND.set_volume(0.3)
-                if event.key == pg.K_LALT and len(J1_missiles) < MAX_MISSILES:
-                    missile = pg.Rect(plane_J1.x-25 + plane_J1.width, plane_J1.y + plane_J1.height//2 - 30, 25, 4)
-                    J1_missiles.append(missile)
-                    MISSILE_FIRE_SOUND.play()
-                    MISSILE_FIRE_SOUND.set_volume(0.3)
-                    
-                if event.key == pg.K_RCTRL and len(J2_bullets) < MAX_BULLETS:
-                    bullet = pg.Rect(plane_J2.x-40 + plane_J2.width, plane_J2.y + plane_J2.height//2 - 10, 10, 2)
-                    J2_bullets.append(bullet)
-                    BULLET_FIRE_SOUND.play()
-                    BULLET_FIRE_SOUND.set_volume(0.3)
-                if event.key == pg.K_RSHIFT and len(J2_missiles) < MAX_MISSILES:
-                    missile = pg.Rect(plane_J2.x-25 + plane_J2.width, plane_J2.y + plane_J2.height//2 - 30, 25, 4)
-                    J2_missiles.append(missile)
-                    MISSILE_FIRE_SOUND.play()
-                    MISSILE_FIRE_SOUND.set_volume(0.3)
-                           
-            if event.type == PLANE_J1_HIT_BY_BULLETS:
-                J1_health -= 5
-                BULLET_HIT_SOUND.play()
-                BULLET_HIT_SOUND.set_volume(0.3)
-                
-            if event.type == PLANE_J1_HIT_BY_MISSILES:
-                J1_health -= 15
-                MISSILE_HIT_SOUND.play()
-                MISSILE_HIT_SOUND.set_volume(0.3)
-                               
-            if event.type == PLANE_J2_HIT_BY_BULLETS:               
-                J2_health -= 5
-                BULLET_HIT_SOUND.play()
-                BULLET_HIT_SOUND.set_volume(0.3)
-                
-            if event.type == PLANE_J2_HIT_BY_MISSILES:               
-                J2_health -= 15
-                MISSILE_HIT_SOUND.play()
-                MISSILE_HIT_SOUND.set_volume(0.3)
-                
-                              
-        winner_text =""                 
-        if J1_health <= 0 :
+            if event.type == pg.KEYDOWN:
+                #-----------PLAYER 1-------------
+                if event.key == pg.K_LSHIFT and len(J1_bullets) < MAX_BULLET:
+                    J1_bullets.append(player1.shoot_bullet())
+                if event.key == pg.K_SPACE and len(J1_missiles) < MAX_MISSILE:
+                    J1_missiles.append(player1.shoot_missile())
+                #-----------PLAYER 2-------------- 
+                if event.key == pg.K_RCTRL and len(J2_bullets) < MAX_BULLET:
+                    J2_bullets.append(player2.shoot_bullet())
+                if event.key == pg.K_RSHIFT and len(J2_missiles) < MAX_MISSILE:
+                    J2_missiles.append(player2.shoot_missile())
+
+
+        #---------Draw the background---------------- 
+        draw_bg(SCREEN)
+        
+        #---------Draw the health Bar----------------
+        draw_health_bar(player1.health,10, 10)
+        draw_health_bar(player2.health,815, 10)
+        
+        #---------Draw Score and Player --------------------
+        draw_text("Score P1 : " + str(player1.score), SCORE_FONT, RED, 8, 40)
+        draw_text("Score P2 : " + str(player2.score), SCORE_FONT, BLUE, 813, 40)
+        
+        draw_text("P.1", PLAYER_FONT, RED, player1.x, player1.y)
+        draw_text("P.2", PLAYER_FONT, BLUE, player2.x, player2.y)
+            
+        #---------Draw the Aircrafts-----------------
+        Player1.draw(player1,SCREEN)
+        Player2.draw(player2,SCREEN)
+        
+        #---------Setup the player's movement--------
+        J1_handle_movement(player1)
+        J2_handle_movement(player2)
+     
+        # --------Setup the weapon's movement and collision-----------
+        handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, player2)
+        
+        
+        if player1.health <= 0 :
             winner_text = "Player 2 wins !"
-            GAME_SOUND.stop()
-            VICTORY_SOUND.play()
-            VICTORY_SOUND.set_volume(0.5)
-            
-        if J2_health <= 0 :
+            player1.set_explosion(AIRCRAFT_EXPLOSION)
+            # GAME_SOUND.stop()
+            # VICTORY_SOUND.play()
+            # VICTORY_SOUND.set_volume(0.5)
+            # break  
+        elif player2.health <= 0 :
             winner_text = "Player 1 wins !"
-            GAME_SOUND.stop()
-            VICTORY_SOUND.play()
-            VICTORY_SOUND.set_volume(0.5)
+            player2.set_explosion(AIRCRAFT_EXPLOSION)
+            # draw_text(winner_text, WINNER_FONT, WHITE, (WIDTH/4), (HEIGTH/2 - 60))
+            # GAME_SOUND.stop()
+            # VICTORY_SOUND.play()
+            # VICTORY_SOUND.set_volume(0.5)
         
-        if winner_text != "":
-            draw_winner(winner_text)
-            break
+        draw_text(winner_text, WINNER_FONT, WHITE, (WIDTH/4), (HEIGTH/2 - 60))
+        # pg.time.delay(2000)
+        
+        # if winner_text != "":
             
-            
-        keys_pressed = pg.key.get_pressed()
-        J1_handle_movement(keys_pressed, plane_J1)
-        J2_handle_movement(keys_pressed, plane_J2)
         
-        handle_bullets(J1_bullets, J2_bullets, plane_J1, plane_J2)
-        handle_missiles(J1_missiles, J2_missiles, plane_J1, plane_J2)
-                  
-        draw_windows(plane_J1, plane_J2, J1_bullets,J1_missiles, J2_bullets, J2_missiles, J1_health, J2_health)  
-    
-    # Restart the game 
+        
+        #---------Update the screen--------------
+        pg.display.update()
+        
     main()
-       
         
-    
-if __name__ == "__main__":
+
+
+if __name__ == '__main__':
     main()
-
-
-
-# class Game:
-#     def __init__(self):
-#         pg.init()
-#         self.screen = pg.display.set_mode((WITDH, HEIGTH))
-#         pg.display.set_caption(TITLE)
-#         self.clock = pg.time.Clock()
-        
-        
-#     def play (self):
-#         self.playing = True
     
-
-
-# Game.play(self)
-
-# ----------Start The Game -----------
-# g = Game()
-# g.show_start_screen()
-# while True:
-#     g.new()
-#     g.play()
-#     g.show_go_screen()

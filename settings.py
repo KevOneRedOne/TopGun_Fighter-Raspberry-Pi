@@ -1,79 +1,103 @@
 import pygame as pg
-import os
-
-# ---------------------------------------------------------------------------                 
+# --------------------------------------------------------------                
 #          ----------- GAME SETTINGS -----------------  
-# ---------------------------------------------------------------------------   
+# --------------------------------------------------------------   
 WIDTH = 1024 # 16 * 64 / 32 * 32 / 64 * 16
 HEIGTH = 768 # 16 * 48 / 32 * 24 / 64 * 12
-FPS = 60
 GAME_NAME = "TopGun_Fighter"
 SCREEN = pg.display.set_mode((WIDTH,HEIGTH))
 TITLE =  pg.display.set_caption(GAME_NAME)
+BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGTH))
+# BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGTH))
+# BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGTH))
+# BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGTH))
+FPS = 60
 
-BACKGROUND_IMG = pg.transform.scale(pg.image.load(os.path.join('assets/images/wallpaper', 'bg55.png')), (WIDTH, HEIGTH))
-# BACKGROUND_IMG = pg.transform.scale(pg.image.load(os.path.join('assets/images/wallpaper', 'bg6.png')), (WIDTH, HEIGTH))
+# score P1 et P2
+# SCORE = [0, 0]
 
-#----------Font------------- 
+
+#======================== Font =========================
 pg.font.init()
-# MENU_FONT = pg.font.Font('assets//font//TOP_GUN.ttf', 100)
-HEALTH_FONT = pg.font.Font('assets//font//CarbonBlock.ttf',30)
-WINNER_FONT = pg.font.Font('assets//font//CarbonBlock.ttf',100)
+# MENU_FONT = pg.font.Font('assets/font/TOP_GUN.ttf', 50)
+SCORE_FONT = pg.font.Font('assets/font/CarbonBlock.ttf', 25)
+PLAYER_FONT = pg.font.Font('assets/font/CarbonBlock.ttf', 15)
+WINNER_FONT = pg.font.Font('assets/font/CarbonBlock.ttf', 100)
 
 
-# -------Sound Effect------
+#==================== Sound Effect =====================
 pg.mixer.init()
 # Game sound
-GAME_SOUND =  pg.mixer.Sound(os.path.join('assets/sound', 'DangerZone.mp3'))
-VICTORY_SOUND =  pg.mixer.Sound(os.path.join('assets/sound', 'greeting.mp3'))
+GAME_SOUND =  pg.mixer.Sound('assets/sound/DangerZone.mp3')
+VICTORY_SOUND =  pg.mixer.Sound('assets/sound/greeting.mp3')
 
 # Missile and bullet
-BULLET_FIRE_SOUND = pg.mixer.Sound(os.path.join('assets/sound', 'shoot.mp3'))
-BULLET_HIT_SOUND = pg.mixer.Sound(os.path.join('assets/sound', 'shoothit.mp3'))
-MISSILE_FIRE_SOUND = pg.mixer.Sound(os.path.join('assets/sound', 'missile.mp3'))
-MISSILE_HIT_SOUND = pg.mixer.Sound(os.path.join('assets/sound', 'missilehit.wav'))
+BULLET_FIRE_SOUND = pg.mixer.Sound('assets/sound/shoot.mp3')
+BULLET_HIT_SOUND = pg.mixer.Sound('assets/sound/shoothit.mp3')
+MISSILE_FIRE_SOUND = pg.mixer.Sound('assets/sound/missile.mp3')
+MISSILE_HIT_SOUND = pg.mixer.Sound('assets/sound/missilehit.wav')
 
 
-# ---------------------------------------------------------------------------                 
+
+# --------------------------------------------------------------               
 #          ----------- PLANES SETTINGS -----------------  
-# ---------------------------------------------------------------------------   
-# Import Assets Planes
-AIR_FIGHTER_J1_IMG = pg.image.load(os.path.join('assets/images/planes', 'f-14.png'))
-# AIR_FIGHTER_J1_IMG = pg.image.load(os.path.join('assets/images/planes', 'f-14.png'))
-AIR_FIGHTER_J2_IMG = pg.image.load(os.path.join('assets/images/planes', 'SU-47.png'))
-# AIR_FIGHTER_J2_IMG = pg.image.load(os.path.join('assets/images/planes', 'SU-57.png'))
+# --------------------------------------------------------------   
+#-------Size of the planes--------
+PLANE_WIDTH, PLANE_HEIGHT = 70, 80
+EXPLOSION_WIDTH, EXPLOSION_HEIGHT = 100, 100
 
-# Custom Width and heigth 
-PLANE_WIDTH, PLANE_HEIGHT = 80, 90
+#-----Load Images of planes-------
+AIRCRAFT_F2_IMG = pg.transform.scale(pg.image.load('assets/images/planes/f-2.png'), (PLANE_WIDTH, PLANE_HEIGHT))
+AIRCRAFT_F14_IMG = pg.transform.scale(pg.image.load('assets/images/planes/f-14.png'), (PLANE_WIDTH, PLANE_HEIGHT))
+AIRCRAFT_F18_IMG = pg.transform.scale(pg.image.load('assets/images/planes/f-18.png'), (PLANE_WIDTH, PLANE_HEIGHT))
+AIRCRAFT_F22_IMG = pg.transform.scale(pg.image.load('assets/images/planes/f-22.png'), (PLANE_WIDTH, PLANE_HEIGHT))
+AIRCRAFT_RAFALE_IMG = pg.transform.scale(pg.image.load('assets/images/planes/rafale.png'), (PLANE_WIDTH, PLANE_HEIGHT))
+AIRCRAFT_SU28_IMG = pg.transform.scale(pg.image.load('assets/images/planes/SU-28.png'), (PLANE_WIDTH, PLANE_HEIGHT))
+AIRCRAFT_SU47_IMG = pg.transform.scale(pg.image.load('assets/images/planes/SU-47.png'), (PLANE_WIDTH, PLANE_HEIGHT))
+AIRCRAFT_SU57_IMG = pg.transform.scale(pg.image.load('assets/images/planes/SU-57.png'), (PLANE_WIDTH, PLANE_HEIGHT))
 
-# Rotation of the Image
-ROTATION_J1 = 270
-ROTATION_J2 = 90
+AIRCRAFTS_IMGS = [
+    AIRCRAFT_F2_IMG,
+    AIRCRAFT_F14_IMG,
+    AIRCRAFT_F18_IMG,
+    AIRCRAFT_F22_IMG,
+    AIRCRAFT_RAFALE_IMG,
+    AIRCRAFT_SU28_IMG,
+    AIRCRAFT_SU47_IMG,
+    AIRCRAFT_SU57_IMG
+]
 
-# Custom size and rotation of the plane
-AIR_FIGHTER_J1 = pg.transform.rotate(pg.transform.scale(AIR_FIGHTER_J1_IMG, (PLANE_WIDTH, PLANE_HEIGHT)), ROTATION_J1 )
-AIR_FIGHTER_J2 = pg.transform.rotate(pg.transform.scale(AIR_FIGHTER_J2_IMG, (PLANE_WIDTH, PLANE_HEIGHT)), ROTATION_J2 )
+AIRCRAFT_EXPLOSION = pg.transform.scale(pg.image.load('assets/images/missiles_bullets/explosion2.png'), (EXPLOSION_WIDTH,EXPLOSION_HEIGHT))
 
-# Planes speed
-VELOCITY = 5
-# Missiles and bullets speeds
-BULLET_VELOCITY = 5
-MISSILES_VELOCITY = 8
-MAX_BULLETS = 6
-MAX_MISSILES = 1
+# --------------------------------------------------------------               
+#          ------- Bullets and Missiles SETTINGS ------  
+# --------------------------------------------------------------  
+#-------Size of the weapons--------
+BULLET_WIDTH, BULLET_HEIGHT = 25, 5
+MISSILE_WIDTH, MISSILE_HEIGHT = 50, 10
+
+#-----Load Images of weapons-------
+BULLET1_IMG = pg.transform.scale(pg.image.load('assets/images/missiles_bullets/bullets.png'), (BULLET_WIDTH, BULLET_HEIGHT))
+MISSILE1_IMG = pg.transform.scale(pg.image.load('assets/images/missiles_bullets/missile1.png'), (MISSILE_WIDTH, MISSILE_HEIGHT))
+MISSILE2_IMG = pg.transform.scale(pg.image.load('assets/images/missiles_bullets/missile2.png'), (MISSILE_WIDTH, MISSILE_HEIGHT))
+MISSILES_IMG = [
+    MISSILE1_IMG, 
+    MISSILE2_IMG
+]
+# --------Stats of weapons--------
+MAX_BULLET = 7
+MAX_MISSILE = 2
+VELOCITY_BULLET = 6
+VELOCITY_MISSILE = 7
+BULLET_DAMAGE = 5
+MISSILE_DAMAGE = 15
+BULLET_POINT =  20
+MISSILE_POINT = 40
 
 
-# ----------- Events priority-----------------
-PLANE_J1_HIT_BY_BULLETS = pg.USEREVENT + 1
-PLANE_J1_HIT_BY_MISSILES = pg.USEREVENT + 2
-PLANE_J2_HIT_BY_BULLETS = pg.USEREVENT + 4
-PLANE_J2_HIT_BY_MISSILES = pg.USEREVENT + 5
-
-
-
-# ---------------------------------------------------------------------------                 
+# -------------------------------------------------------------           
 #          ----------- COLOR SETTINGS -----------------  
-# ---------------------------------------------------------------------------   
+# -------------------------------------------------------------
 # RGB
 BLACK = (0,0,0)
 BLUE = (0,0,255)
@@ -83,3 +107,4 @@ RED = (255,0,0)
 MAGENTA = (255,0,255)
 YELLOW = (255,255,0)
 WHITE = (255,255,255)
+ORANGE = pg.Color('orange')
