@@ -4,152 +4,135 @@
 # Game Name : TOPGUN_Fighter
 # Project Date : 16/05/2022 to 13/06/2022
 # --------------------------------------------
+
 import pygame as pg
+import pygame_menu
 from aircraft_fighter import *
 from settings import *
 from utils import *
+from score import *
 
-# --------------------------------------------------------------              
-#        ----------- Drawing of the game -----------------  
+# --------------------------------------------------------------                
+#          ----------- MAIN MENU -----------------  
 # --------------------------------------------------------------  
-# ------ Background ------
-def draw_bg(SCREEN):
-    SCREEN.blit(BACKGROUND_IMG, (0,0))
+def mainMenu():
+    pg.init()
+    # setup the theme of the menu
+    mainMenuTheme = pygame_menu.themes.THEME_DARK.copy()
+    mainMenuTheme.background_color = pygame_menu.BaseImage(
+        'assets/images/wallpaper/bg6.png')
+    mainMenuTheme.title_background_color = (0, 0, 0, 0)
+    mainMenuTheme.title_font = MENU_FONT
+    mainMenuTheme.title_offset = (WIDTH/3, ((HEIGTH-HEIGTH) + 30 ))
+    mainMenuTheme.widget_font = MENU_FONT
+    mainMenuTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
+    # instantiation
+    mainMenu = pygame_menu.Menu(
+        'T O P G U N   F i g h t e r s', WIDTH, HEIGTH, theme=mainMenuTheme)
+    # add widget
+    mainMenu.add.image(image_path='assets/images/TOPGUN.png', scale=(0.5, 0.5), scale_smooth=True, float=False)
+    mainMenu.add.button('P l a y', game, font_color=RED)
+    mainMenu.add.button('I n s t r u c t i o n s',instructionMenu,font_color=BLUE)
+    mainMenu.add.button('S c o r e', menuScore, font_color=RED)
+    mainMenu.add.button('O p t i o n s',optionMenu, font_color=BLUE)
+    mainMenu.add.button('Q u i t', pygame_menu.events.EXIT, font_color=RED)
+    # loop Menu
+    mainMenu.mainloop(SCREEN)
+    
+# --------------------------------------------------------------                
+#          ----------- INSTRUCTION MENU -----------------  
+# -------------------------------------------------------------- 
+def instructionMenu():
+    pg.init()
+    # setup the theme of the menu
+    instructionMenuTheme = pygame_menu.themes.THEME_DARK.copy()
+    instructionMenuTheme.background_color = pygame_menu.BaseImage(
+        'assets/images/wallpaper/bg6.png')
+    instructionMenuTheme.title_background_color = (0, 0, 0, 0)
+    instructionMenuTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
+    instructionMenuTheme.title_font = MENU_FONT
+    instructionMenuTheme.title_color = WHITE
+    instructionMenuTheme.title_offset = (WIDTH/2.45, ((HEIGTH-HEIGTH) + 30 ))
+    instructionMenuTheme.widget_font = SCORE_FONT
+    instructionMenuTheme.button_font = MENU_FONT
+    # instantiation of the menu
+    instructionMenu = pygame_menu.Menu('Instruction', WIDTH, HEIGTH, theme=instructionMenuTheme)
+    # add widget
+    instructionMenu.add.vertical_margin(50)
+    instructionMenu.add.label(HELP_TITLE, font_color=BLUE, align=pygame_menu.locals.ALIGN_CENTER)
+    instructionMenu.add.label(HELP_CONTENT, font_color=WHITE, align=pygame_menu.locals.ALIGN_CENTER)
+    instructionMenu.add.label(HELP_CONTROL_TITLE, font_color=RED, background_color=(0,0,0,100), align=pygame_menu.locals.ALIGN_CENTER)
+    instructionMenu.add.label(HELP_CONTROL_J1, font_color=WHITE, background_color=(0,0,0,100), align=pygame_menu.locals.ALIGN_CENTER)
+    instructionMenu.add.vertical_margin(50)
+    instructionMenu.add.button('P L A Y', game, font_color=RED, padding=(20, 20, 20, 20))
+    instructionMenu.add.button('R E T U R N', mainMenu, font_color=RED, padding=(20, 20, 20, 20), border_width=0)
+    # loop Menu
+    instructionMenu.mainloop(SCREEN)
 
-# ------ Health Bar ------
-def draw_health_bar(health, x, y):
-    ratio = health/100
-    pg.draw.rect(SCREEN, WHITE, (x-2, y-2, 204, 24))
-    pg.draw.rect(SCREEN, RED, (x, y, 200, 20))
-    pg.draw.rect(SCREEN, GREEN, (x, y, 200*ratio, 20))
+# --------------------------------------------------------------                
+#          ----------- SCORE MENU -----------------  
+# -------------------------------------------------------------- 
+def menuScore():
+    pg.init()
+    
+    # setup the theme of the menu
+    ScoreMenuTheme = pygame_menu.themes.THEME_DARK.copy()
+    ScoreMenuTheme.background_color = pygame_menu.BaseImage(
+    'assets/images/wallpaper/bg55.png')
+    ScoreMenuTheme.title_background_color = (0, 0, 0, 0)
+    ScoreMenuTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
+    ScoreMenuTheme.title_font = MENU_FONT
+    ScoreMenuTheme.title_offset = (WIDTH/2.25, ((HEIGTH-HEIGTH) + 30 ))
+    ScoreMenuTheme.widget_font = SCORE_FONT
+    
+    # instantiation of the menu
+    ScoreMenu = pygame_menu.Menu('S C O R E', WIDTH, HEIGTH, theme=ScoreMenuTheme)
+    
+    # add widget
+    ScoreMenu.add.label(getScores())  #ingrogress
+    ScoreMenu.add.vertical_margin(100)
+    ScoreMenu.add.button('R E T U R N', mainMenu, font_color=RED, padding=(20, 20, 20, 20), border_width=0)
+    
+    ScoreMenu.mainloop(SCREEN)
 
-# ------ Draw text on the screen ------
-def draw_text(text, font, text_col, x, y):
-    texte_to_print = font.render(text, True, text_col)
-    SCREEN.blit(texte_to_print, (x,y))
+# --------------------------------------------------------------                
+#          ----------- OPTION MENU -----------------  
+# -------------------------------------------------------------- 
+def optionMenu():
+    pg.init()
+    # setup the theme of the menu
+    optionTheme = pygame_menu.themes.THEME_DARK.copy()
+    optionTheme.background_color = pygame_menu.BaseImage(
+    'assets/images/wallpaper/bg6.png')
+    optionTheme.title_background_color = (0, 0, 0, 0)
+    optionTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
+    optionTheme.title_font = MENU_FONT
+    optionTheme.title_offset = (WIDTH/2.3, ((HEIGTH-HEIGTH) + 30 ))
+    optionTheme.widget_font = MENU_FONT
 
-
-
-# --------------------------------------------------------------               
-#          ----------- J1 and J2 Movement ----------------  
-# --------------------------------------------------------------
-def J1_handle_movement(player1):
-    keys_pressed = pg.key.get_pressed()
-    player_moved = False
-    #--------- rotation left ------------
-    if keys_pressed[pg.K_q]: 
-        player1.rotate(left=True)
-    #--------- rotation right -----------    
-    if keys_pressed[pg.K_d]:  
-        player1.rotate(right=True)
-        
-    #--------- PLAYER MOVE --------------
-    if keys_pressed[pg.K_z]:
-        player_moved=True
-        # collsion with map
-        if not player1.collide_map():
-            player1.move_forward()
-        elif player1.collide_map():
-            player1.step_back()  
-    #--------- PLAYER DOESN'T MOVE ---------- 
-    if not player_moved:
-        if not player1.collide_map():
-            player1.reduce_speed()
-        if player1.collide_map():
-            player1.step_back()
-        #--------IF PLAYER BLOCKED---------
-        if player1.collide_map() and pg.time.delay(2000):
-            player1.reset()
-            
-def J2_handle_movement(player2):
-    keys_pressed = pg.key.get_pressed()
-    player_moved = False
-    #--------- rotation left ------------
-    if keys_pressed[pg.K_LEFT]: 
-        player2.rotate(left=True)
-    #--------- rotation right -----------    
-    if keys_pressed[pg.K_RIGHT]:  
-        player2.rotate(right=True)
-        
-    #--------- PLAYER MOVE --------------
-    if keys_pressed[pg.K_UP]:
-        player_moved=True
-        # collsion with map
-        if not player2.collide_map():
-            player2.move_forward()
-        elif player2.collide_map():
-            player2.step_back()  
-    #--------- PLAYER DOESN'T MOVE ---------- 
-    if not player_moved:
-        if not player2.collide_map():
-            player2.reduce_speed()
-        if player2.collide_map():
-            player2.step_back()
-        #--------IF PLAYER BLOCKED---------
-        if player2.collide_map() and pg.time.delay(2000):
-            player2.reset()
-        
-# ---------------------------------------------------------------------------                 
-#          -----------Bullets/Missiles moves and collisions ------------  
-# ---------------------------------------------------------------------------    
-def handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, player2):           
-    # ------------------ Bullets J1 --------------------
-    for bullet in J1_bullets:
-        bullet.move_weapons()
-        if bullet.rectangle.colliderect(player2.rect):
-            J1_bullets.remove(bullet)
-            #-------health and score--------
-            player2.health -= bullet.damage
-            player1.score += bullet.point
-        elif bullet.collide_map():
-            J1_bullets.remove(bullet)
-            
-    # ----------------- Missiles J1 --------------------
-    for missile in J1_missiles:
-        missile.move_weapons()
-        if missile.rectangle.colliderect(player2.rect):
-            J1_missiles.remove(missile)
-            #-------health and score--------
-            player2.health -= missile.damage
-            player1.score += missile.point
-        elif missile.collide_map():
-            J1_missiles.remove(missile)
-
-    # ------------------ Bullets J2 --------------------
-    for bullet in J2_bullets:
-        bullet.move_weapons()
-        if bullet.rectangle.colliderect(player1.rect):
-            J2_bullets.remove(bullet)
-            #-------health and score--------
-            player1.health -= bullet.damage
-            player2.score += bullet.point
-        elif bullet.collide_map():
-            J2_bullets.remove(bullet)
-            
-    # ----------------- Missiles J2 --------------------
-    for missile in J2_missiles:
-        missile.move_weapons()
-        if missile.rectangle.colliderect(player1.rect):
-            J2_missiles.remove(missile)
-            #-------health and score--------
-            player1.health -= missile.damage
-            player2.score += missile.point
-        elif missile.collide_map():
-            J2_missiles.remove(missile)
-
+    Option_Menu = pygame_menu.Menu('O P T I O N', WIDTH, HEIGTH, theme=optionTheme)
+    
+    # in progress
+    Option_Menu.add.button('R E T U R N', mainMenu, font_color=RED, padding=(20, 20, 20, 20), border_width=0)
+    Option_Menu.mainloop(SCREEN)
 
 # --------------------------------------------------------------             
 #       -----------------Main function -------------------  
 # -------------------------------------------------------------- 
 def main(): 
+    mainMenu()
+
+# --------------------------------------------------------------             
+#       -----------------Game function -------------------  
+# -------------------------------------------------------------- 
+def game():
     #------ Set framerate ----------
     clock = pg.time.Clock()
     playing = True
-    # in_game = False
     
     # ---- Instantiation Player -----
-    player1 = Player1(4,5)
-    player2 = Player2(4,5)
+    player1 = Player1(3,3.5)
+    player2 = Player2(3,3.5)
     
     # ------ Bullet/Missile ---------
     J1_bullets, J1_missiles = [] , []
@@ -158,17 +141,13 @@ def main():
     
     while playing:
         clock.tick(FPS)
-        # while in_menu:
-        #     clock.tick(FPS)
-        # while in:
-        #     clock.tick(FPS)
-        # while in_game:
-            # clock.tick(FPS)
         for event in pg.event.get():
             # Quit the game
             if event.type == pg.QUIT:
                 playing = False
+                pg.joystick.quit()
                 pg.quit()
+
             # Keyboard Event
             if event.type == pg.KEYDOWN:
                 #-----------PLAYER 1-------------
@@ -181,8 +160,24 @@ def main():
                     J2_bullets.append(player2.shoot_bullet())
                 if event.key == pg.K_RSHIFT and len(J2_missiles) < MAX_MISSILE:
                     J2_missiles.append(player2.shoot_missile())
-
-
+                # Go back to the menu
+                if event.key == pg.K_ESCAPE:
+                    mainMenu()
+                
+            # Joystick
+            if event.type == pg.JOYBUTTONDOWN:
+                #-----------PLAYER 1-------------
+                if CONTROLLER_J1.get_button(BUTTON_L1) and len(J1_bullets) < MAX_BULLET:
+                    J1_bullets.append(player1.shoot_bullet())
+                elif CONTROLLER_J1.get_button(BUTTON_R1) and len(J1_missiles) < MAX_MISSILE:
+                    J1_missiles.append(player1.shoot_missile())
+                #-----------PLAYER 2-------------- 
+                if CONTROLLER_J2.get_button(BUTTON_L1) and len(J2_bullets) < MAX_BULLET:
+                    J2_bullets.append(player2.shoot_bullet())
+                elif CONTROLLER_J2.get_button(BUTTON_R1) and len(J2_missiles) < MAX_MISSILE:
+                    J2_missiles.append(player2.shoot_missile())
+                    
+                    
         #---------Draw the background---------------- 
         draw_bg(SCREEN)
         
@@ -204,6 +199,8 @@ def main():
         #---------Setup the player's movement--------
         J1_handle_movement(player1)
         J2_handle_movement(player2)
+        J1_Joystick_movement(player1)
+        J2_Joystick_movement(player2)
      
         # --------Setup the weapon's movement and collision-----------
         handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, player2)
@@ -211,32 +208,30 @@ def main():
         
         if player1.health <= 0 :
             winner_text = "Player 2 wins !"
-            player1.set_explosion(AIRCRAFT_EXPLOSION)
+            player1.set_explosion(AIRCRAFT_EXPLOSION) 
+            Player1.draw(player1,SCREEN)   
+            saveScore("Player 2", player2.score)
             # GAME_SOUND.stop()
             # VICTORY_SOUND.play()
             # VICTORY_SOUND.set_volume(0.5)
-            # break  
         elif player2.health <= 0 :
             winner_text = "Player 1 wins !"
-            player2.set_explosion(AIRCRAFT_EXPLOSION)
-            # draw_text(winner_text, WINNER_FONT, WHITE, (WIDTH/4), (HEIGTH/2 - 60))
+            player2.set_explosion(AIRCRAFT_EXPLOSION) 
+            Player2.draw(player2,SCREEN)     
+            saveScore("Player 1", player1.score)
             # GAME_SOUND.stop()
             # VICTORY_SOUND.play()
             # VICTORY_SOUND.set_volume(0.5)
         
-        draw_text(winner_text, WINNER_FONT, WHITE, (WIDTH/4), (HEIGTH/2 - 60))
-        # pg.time.delay(2000)
-        
-        # if winner_text != "":
-            
+        if winner_text != "":
+            draw_winner(winner_text)
+            menuScore()
         
         
         #---------Update the screen--------------
         pg.display.update()
+    
         
-    main()
-        
-
 
 if __name__ == '__main__':
     main()

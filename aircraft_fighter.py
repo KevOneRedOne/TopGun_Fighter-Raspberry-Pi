@@ -4,7 +4,6 @@ import random
 from settings import *
 from utils import blit_rotate_center
 
-
 # --------------------------------------------------------------               
 #                 ------- CLASS AIRCRAFT --------  
 # --------------------------------------------------------------  
@@ -126,7 +125,7 @@ class Weapons():
 class Player1(AircraftFighter) :
     START_POSITION = (100, 350)
     START_ANGLE = 270
-    
+
     def shoot_bullet(self):
         bullet = Weapons(self.x + PLANE_WIDTH-10, self.y + PLANE_HEIGHT-43, BULLET1_IMG , self.angle, VELOCITY_BULLET, BULLET_DAMAGE, BULLET_POINT)
         return bullet

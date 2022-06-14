@@ -8,18 +8,13 @@ GAME_NAME = "TopGun_Fighter"
 SCREEN = pg.display.set_mode((WIDTH,HEIGTH))
 TITLE =  pg.display.set_caption(GAME_NAME)
 BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGTH))
-# BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGTH))
-# BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGTH))
-# BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGTH))
+BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGTH))
+TOP_GUN_LOGO = pg.transform.scale(pg.image.load('assets/images/TOPGUN.png'), (100, 100))
 FPS = 60
-
-# score P1 et P2
-# SCORE = [0, 0]
-
 
 #======================== Font =========================
 pg.font.init()
-# MENU_FONT = pg.font.Font('assets/font/TOP_GUN.ttf', 50)
+MENU_FONT = pg.font.Font('assets/font/TOP_GUN.ttf', 35)
 SCORE_FONT = pg.font.Font('assets/font/CarbonBlock.ttf', 25)
 PLAYER_FONT = pg.font.Font('assets/font/CarbonBlock.ttf', 15)
 WINNER_FONT = pg.font.Font('assets/font/CarbonBlock.ttf', 100)
@@ -37,6 +32,41 @@ BULLET_HIT_SOUND = pg.mixer.Sound('assets/sound/shoothit.mp3')
 MISSILE_FIRE_SOUND = pg.mixer.Sound('assets/sound/missile.mp3')
 MISSILE_HIT_SOUND = pg.mixer.Sound('assets/sound/missilehit.wav')
 
+#==================== Controller =====================
+pg.joystick.init()
+# axis and buttons
+AXIS_J1 = {}
+AXIS_J2 = {}
+
+# Labels for DS4 controller axes
+# -------------AXIS--------------
+AXIS_LEFT_STICK_X = 0
+AXIS_LEFT_STICK_Y = 1
+AXIS_RIGHT_STICK_X = 2
+AXIS_RIGHT_STICK_Y = 3
+
+# ------------Button-------------
+BUTTON_CROSS = 0
+BUTTON_CIRCULE = 1
+BUTTON_SQUARE = 2
+BUTTON_TRIANGLE = 3
+BUTTON_L1 = 9
+BUTTON_R1 = 10
+
+# Count the number of Joystick
+JOYSTICK_COUNT = pg.joystick.get_count()
+print("Number of joysticks: " + str(JOYSTICK_COUNT))
+
+# =============Contoller=================
+CONTROLLER_J1 = pg.joystick.Joystick(0)
+CONTROLLER_J2 = pg.joystick.Joystick(1)
+CONTROLLER_J1.init()    
+CONTROLLER_J2.init()
+print("Player 1 controller : " + str(CONTROLLER_J1))
+print("Player 1 controller ID : " + str(CONTROLLER_J1.get_id()))
+print("Player 2 controller : " + str(CONTROLLER_J2))
+print("Player 2 controller ID : " + str(CONTROLLER_J2.get_id()))
+        
 
 
 # --------------------------------------------------------------               
@@ -93,6 +123,20 @@ BULLET_DAMAGE = 5
 MISSILE_DAMAGE = 15
 BULLET_POINT =  20
 MISSILE_POINT = 40
+
+
+
+# -------------------------------------------------------------           
+#          ----------- MENU -----------------  
+# -------------------------------------------------------------
+HELP_TITLE = "DEROULEMENT D'UNE PARTIE :"
+HELP_CONTENT = "\nIL S'AGIT D'UN JEU DE COMBAT AERIEN EN 1 CONTRE 1 (P1 VS P2). \nL'OBJECTIF POUR LES 2 JOUEURS SERA DE DETRUIRE L'ADVERSAIRE.\nCHAQUE JOUEUR PEUT TIRER : DES MISSILES (15 DEGATS/40 POINTS) OU DES BULLETS (5 DEGATS/20 POINTS).\n\n"
+HELP_CONTROL_TITLE = "CONTROLE :"
+HELP_CONTROL_J1 = "**JOUEUR 1** : LA MANETTE AVEC LE *JOYSTICK GAUCHE* POUR TOURNER, *JOYSTICK DROIT* POUR AVANCER\nAVEC *L1* (TIR BULLET) / et *R1* (TIR MISSILE)\n"\
+    " ET/OU CLAVIERS : *Z-Q-D* POUR LA DIRECTION, *ESPACE* (BULLET) ET *SHIFT GAUCHE* (MISSILE)\n"\
+    "**JOUEUR 2** : LA MANETTE AVEC LE *JOYSTICK GAUCHE* POUR TOURNER, *JOYSTICK DROIT* POUR AVANCER\nAVEC *L1* (TIR BULLET) / et *R1* (TIR MISSILE)\n"\
+    "   ET/OU CLAVIERS : *FLECHES DIRECTIONS*, *CTRL DROIT* (BULLET) ET *SHIFT DROIT* (MISSILE)"
+
 
 
 # -------------------------------------------------------------           
