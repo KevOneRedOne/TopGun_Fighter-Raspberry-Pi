@@ -1,0 +1,3 @@
+[Desktop Entry]
+Name=TopGun
+Exec=/usr/bin/python3 "/home/pi/Desktop/TopGun_Fighter-Raspberry-Pi/main.py"
