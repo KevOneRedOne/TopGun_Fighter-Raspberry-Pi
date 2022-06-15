@@ -126,6 +126,9 @@ def main():
 #       -----------------Game function -------------------  
 # -------------------------------------------------------------- 
 def game():
+    #-----Music of the Game
+    GAME_SOUND.play(-1)
+    GAME_SOUND.set_volume(0.3)
     #------ Set framerate ----------
     clock = pg.time.Clock()
     playing = True
@@ -153,13 +156,21 @@ def game():
                 #-----------PLAYER 1-------------
                 if event.key == pg.K_LSHIFT and len(J1_bullets) < MAX_BULLET:
                     J1_bullets.append(player1.shoot_bullet())
+                    BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.set_volume(0.3)
                 if event.key == pg.K_SPACE and len(J1_missiles) < MAX_MISSILE:
                     J1_missiles.append(player1.shoot_missile())
+                    MISSILE_FIRE_SOUND.play()
+                    MISSILE_FIRE_SOUND.set_volume(0.3)
                 #-----------PLAYER 2-------------- 
                 if event.key == pg.K_RCTRL and len(J2_bullets) < MAX_BULLET:
                     J2_bullets.append(player2.shoot_bullet())
+                    BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.set_volume(0.3)
                 if event.key == pg.K_RSHIFT and len(J2_missiles) < MAX_MISSILE:
                     J2_missiles.append(player2.shoot_missile())
+                    MISSILE_FIRE_SOUND.play()
+                    MISSILE_FIRE_SOUND.set_volume(0.3)
                 # Go back to the menu
                 if event.key == pg.K_ESCAPE:
                     mainMenu()
@@ -169,13 +180,19 @@ def game():
                 #-----------PLAYER 1-------------
                 if CONTROLLER_J1.get_button(BUTTON_L1) and len(J1_bullets) < MAX_BULLET:
                     J1_bullets.append(player1.shoot_bullet())
+                    BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.set_volume(0.3)
                 elif CONTROLLER_J1.get_button(BUTTON_R1) and len(J1_missiles) < MAX_MISSILE:
                     J1_missiles.append(player1.shoot_missile())
                 #-----------PLAYER 2-------------- 
                 if CONTROLLER_J2.get_button(BUTTON_L1) and len(J2_bullets) < MAX_BULLET:
                     J2_bullets.append(player2.shoot_bullet())
+                    BULLET_FIRE_SOUND.play()
+                    BULLET_FIRE_SOUND.set_volume(0.3)
                 elif CONTROLLER_J2.get_button(BUTTON_R1) and len(J2_missiles) < MAX_MISSILE:
                     J2_missiles.append(player2.shoot_missile())
+                    MISSILE_FIRE_SOUND.play()
+                    MISSILE_FIRE_SOUND.set_volume(0.3)
                     
                     
         #---------Draw the background---------------- 
@@ -211,17 +228,17 @@ def game():
             player1.set_explosion(AIRCRAFT_EXPLOSION) 
             Player1.draw(player1,SCREEN)   
             saveScore("Player 2", player2.score)
-            # GAME_SOUND.stop()
-            # VICTORY_SOUND.play()
-            # VICTORY_SOUND.set_volume(0.5)
+            GAME_SOUND.stop()
+            VICTORY_SOUND.play()
+            VICTORY_SOUND.set_volume(0.5)
         elif player2.health <= 0 :
             winner_text = "Player 1 wins !"
             player2.set_explosion(AIRCRAFT_EXPLOSION) 
             Player2.draw(player2,SCREEN)     
             saveScore("Player 1", player1.score)
-            # GAME_SOUND.stop()
-            # VICTORY_SOUND.play()
-            # VICTORY_SOUND.set_volume(0.5)
+            GAME_SOUND.stop()
+            VICTORY_SOUND.play()
+            VICTORY_SOUND.set_volume(0.5)
         
         if winner_text != "":
             draw_winner(winner_text)

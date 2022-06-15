@@ -26,7 +26,7 @@ def draw_winner(text):
     draw_text = WINNER_FONT.render(text, 1, WHITE)
     SCREEN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGTH/2 - draw_text.get_height()/2))
     pg.display.update()
-    pg.time.delay(3000)
+    pg.time.delay(10000)
     
 
 # --------------------------------------------------------------               
@@ -142,6 +142,8 @@ def handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, pl
             #-------health and score--------
             player2.health -= bullet.damage
             player1.score += bullet.point * random.randint(1,5)
+            BULLET_HIT_SOUND.play()
+            BULLET_HIT_SOUND.set_volume(0.3)
         elif bullet.collide_map():
             J1_bullets.remove(bullet)
             
@@ -153,6 +155,9 @@ def handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, pl
             #-------health and score--------
             player2.health -= missile.damage
             player1.score += missile.point * random.randint(1,5)
+            MISSILE_HIT_SOUND.play()
+            MISSILE_HIT_SOUND.set_volume(0.3)
+            
         elif missile.collide_map():
             J1_missiles.remove(missile)
 
@@ -164,6 +169,8 @@ def handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, pl
             #-------health and score--------
             player1.health -= bullet.damage
             player2.score += bullet.point * random.randint(1,5)
+            BULLET_HIT_SOUND.play()
+            BULLET_HIT_SOUND.set_volume(0.3)
         elif bullet.collide_map():
             J2_bullets.remove(bullet)
             
@@ -175,5 +182,7 @@ def handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, pl
             #-------health and score--------
             player1.health -= missile.damage
             player2.score += missile.point * random.randint(1,5)
+            MISSILE_HIT_SOUND.play()
+            MISSILE_HIT_SOUND.set_volume(0.3)
         elif missile.collide_map():
             J2_missiles.remove(missile)
