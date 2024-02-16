@@ -21,8 +21,14 @@ class AircraftFighter(pg.sprite.Sprite):
         self.acceleration = 0.1
         self.score = 0
         
+    def rotate(self, left=False, right=False):
+        if left:
+            self.angle += self.rotation_velocity
+        elif right:
+            self.angle -= self.rotation_velocity
+        
     def draw(self):
-        blit_rotate_center(SCREEN, self.image, (self.x, self.y), self.angle)
+        blit_rotate_center(self.image, (self.x, self.y), self.angle)
         
     def move_forward(self):
         self.vel = min(self.vel + self.acceleration, self.max_velocity)
@@ -96,7 +102,7 @@ class Weapons():
         horizontal = math.sin(radians) * self.vel 
         self.x -= horizontal  
         self.y -= vertical
-        self.rect = blit_rotate_center(SCREEN, self.image, (self.x, self.y), self.angle-90)
+        self.rect = blit_rotate_center(self.image, (self.x, self.y), self.angle-90)
         self.rectangle.x = self.x
         self.rectangle.y = self.y 
         

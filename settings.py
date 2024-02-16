@@ -10,7 +10,7 @@ TITLE =  pg.display.set_caption(GAME_NAME)
 BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGHT))
 BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGHT))
 TOP_GUN_LOGO = pg.transform.scale(pg.image.load('assets/images/TOPGUN.png'), (100, 100))
-FPS = 60
+FPS = 100
 
 #======================== Font =========================
 pg.font.init()

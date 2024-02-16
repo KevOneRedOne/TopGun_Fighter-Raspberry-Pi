@@ -115,7 +115,7 @@ def j1_joystick_movement(player1):
     if axe_y_joy_right > 0.1:
         player1.reduce_speed()
                           
-def J2_Joystick_movement(player2):    
+def j2_joystick_movement(player2):    
     axe_x_joy_left = round(CONTROLLER_J2.get_axis(0),2)
     axe_y_joy_right = round(CONTROLLER_J2.Joystick(1).get_axis(3),2)
     #---------Left/Right------------
