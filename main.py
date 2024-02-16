@@ -214,9 +214,14 @@ def game():
         #---------Setup the player's movement--------
         j1_handle_movement(player1)
         j2_handle_movement(player2)
-        j1_joystick_movement(player1)
-        j2_joystick_movement(player2)
-     
+        
+        if pg.joystick.get_count() > 0:
+            j1_joystick_movement(player1)
+            
+        if pg.joystick.get_count() > 1:
+            j1_joystick_movement(player1)
+            j2_joystick_movement(player2)
+        
         # --------Setup the weapon's movement and collision-----------
         handle_weapons(j1_bullets, j1_missiles, j2_bullets, j2_missiles, player1, player2)
         

@@ -59,51 +59,28 @@ BUTTON_R1 = 10
 JOYSTICK_COUNT = pg.joystick.get_count()
 print("Number of joysticks: " + str(JOYSTICK_COUNT))
 
-CONTROLLER_J1 = None
-CONTROLLER_J2 = None
-
-if JOYSTICK_COUNT > 0:
+if JOYSTICK_COUNT == 0:
+    print("No joystick detected")
+    CONTROLLER_J1 = None
+    CONTROLLER_J2 = None
+elif JOYSTICK_COUNT == 1:
     CONTROLLER_J1 = pg.joystick.Joystick(0)
     CONTROLLER_J1.init()
     print("Player 1 controller : " + str(CONTROLLER_J1))
     print("Player 1 controller ID : " + str(CONTROLLER_J1.get_id()))
-    
-if JOYSTICK_COUNT > 1:
+    CONTROLLER_J2 = None
+elif JOYSTICK_COUNT == 2:
+    CONTROLLER_J1 = pg.joystick.Joystick(0)
+    CONTROLLER_J1.init()
+    print("Player 1 controller : " + str(CONTROLLER_J1))
+    print("Player 1 controller ID : " + str(CONTROLLER_J1.get_id()))
     CONTROLLER_J2 = pg.joystick.Joystick(1)
     CONTROLLER_J2.init()
     print("Player 2 controller : " + str(CONTROLLER_J2))
     print("Player 2 controller ID : " + str(CONTROLLER_J2.get_id()))
-    
+            
 
-# CONTROLLER_J1 = pg.joystick.Joystick(0)
-# CONTROLLER_J2 = pg.joystick.Joystick(1)
-# CONTROLLER_J1.init()    
-# CONTROLLER_J2.init()
-# print("Player 1 controller : " + str(CONTROLLER_J1))
-# print("Player 1 controller ID : " + str(CONTROLLER_J1.get_id()))
-# print("Player 2 controller : " + str(CONTROLLER_J2))
-# print("Player 2 controller ID : " + str(CONTROLLER_J2.get_id()))
         
-# ==================== Keyboard Controls =====================
-# Define keys for player 1
-PLAYER1_KEYS = {
-    'left': pg.K_LEFT,
-    'right': pg.K_RIGHT,
-    'up': pg.K_UP,
-    'down': pg.K_DOWN,
-    'shoot_bullet': pg.K_SPACE,
-    'shoot_missile': pg.K_LSHIFT
-}
-
-# Define keys for player 2
-PLAYER2_KEYS = {
-    'left': pg.K_a,
-    'right': pg.K_d,
-    'up': pg.K_w,
-    'down': pg.K_s,
-    'shoot_bullet': pg.K_LCTRL,
-    'shoot_missile': pg.K_RSHIFT
-}
 
 # --------------------------------------------------------------               
 #          ----------- PLANES SETTINGS -----------------  
