@@ -10,7 +10,7 @@ TITLE =  pg.display.set_caption(GAME_NAME)
 BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGHT))
 BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGHT))
 TOP_GUN_LOGO = pg.transform.scale(pg.image.load('assets/images/TOPGUN.png'), (100, 100))
-FPS = 60
+FPS = 100
 
 #======================== Font =========================
 pg.font.init()
@@ -22,6 +22,7 @@ WINNER_FONT = pg.font.Font('assets/font/CarbonBlock.ttf', 100)
 
 #==================== Sound Effect =====================
 pg.mixer.init()
+
 # Game sound
 GAME_SOUND =  pg.mixer.Sound('assets/sound/DangerZone.mp3')
 VICTORY_SOUND =  pg.mixer.Sound('assets/sound/greeting.mp3')
@@ -32,8 +33,9 @@ BULLET_HIT_SOUND = pg.mixer.Sound('assets/sound/shoothit.mp3')
 MISSILE_FIRE_SOUND = pg.mixer.Sound('assets/sound/missile.mp3')
 MISSILE_HIT_SOUND = pg.mixer.Sound('assets/sound/missilehit.wav')
 
-#==================== Controller =====================
+#==================== Controllers =====================
 pg.joystick.init()
+
 # axis and buttons
 AXIS_J1 = {}
 AXIS_J2 = {}
@@ -78,6 +80,7 @@ elif JOYSTICK_COUNT == 2:
     print("Player 2 controller ID : " + str(CONTROLLER_J2.get_id()))
             
 
+        
 
 # --------------------------------------------------------------               
 #          ----------- PLANES SETTINGS -----------------  

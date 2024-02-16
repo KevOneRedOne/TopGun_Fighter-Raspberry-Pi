@@ -1,8 +1,8 @@
 import pygame as pg
 import math
 import random
-from settings import *
 from utils import blit_rotate_center
+from settings import SCREEN, AIRCRAFT_IMGS, PLANE_HEIGHT, PLANE_WIDTH, WIDTH, HEIGHT, BULLET_HEIGHT, BULLET_WIDTH, BULLET1_IMG, VELOCITY_BULLET, BULLET_DAMAGE, BULLET_POINT, MISSILES_IMG, VELOCITY_MISSILE, MISSILE_DAMAGE, MISSILE_POINT
 
 # --------------------------------------------------------------               
 #                 ------- CLASS AIRCRAFT --------  
@@ -26,9 +26,9 @@ class AircraftFighter(pg.sprite.Sprite):
             self.angle += self.rotation_velocity
         elif right:
             self.angle -= self.rotation_velocity
-            
-    def draw(self, SCREEN):
-        blit_rotate_center(SCREEN, self.image, (self.x, self.y), self.angle)
+        
+    def draw(self):
+        blit_rotate_center(self.image, (self.x, self.y), self.angle)
         
     def move_forward(self):
         self.vel = min(self.vel + self.acceleration, self.max_velocity)
@@ -102,7 +102,7 @@ class Weapons():
         horizontal = math.sin(radians) * self.vel 
         self.x -= horizontal  
         self.y -= vertical
-        self.rect = blit_rotate_center(SCREEN, self.image, (self.x, self.y), self.angle-90)
+        self.rect = blit_rotate_center(self.image, (self.x, self.y), self.angle-90)
         self.rectangle.x = self.x
         self.rectangle.y = self.y 
         
