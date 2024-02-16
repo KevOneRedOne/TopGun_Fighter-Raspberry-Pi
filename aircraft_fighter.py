@@ -1,15 +1,15 @@
 import pygame as pg
 import math
 import random
-from settings import *
 from utils import blit_rotate_center
+from settings import SCREEN, AIRCRAFT_IMGS, PLANE_HEIGHT, PLANE_WIDTH, WIDTH, HEIGHT, BULLET_HEIGHT, BULLET_WIDTH, BULLET1_IMG, VELOCITY_BULLET, BULLET_DAMAGE, BULLET_POINT, MISSILES_IMG, VELOCITY_MISSILE, MISSILE_DAMAGE, MISSILE_POINT
 
 # --------------------------------------------------------------               
 #                 ------- CLASS AIRCRAFT --------  
 # --------------------------------------------------------------  
 class AircraftFighter(pg.sprite.Sprite):
     def __init__(self, max_velocity,rotation_velocity):
-        self.image = AIRCRAFTS_IMGS[random.randint(0,7)]
+        self.image = AIRCRAFT_IMGS[random.randint(0,7)]
         self.rect = self.image.get_rect()
         self.rect.x , self.rect.y = self.START_POSITION 
         self.max_velocity = max_velocity
@@ -21,13 +21,7 @@ class AircraftFighter(pg.sprite.Sprite):
         self.acceleration = 0.1
         self.score = 0
         
-    def rotate(self, left=False, right=False):
-        if left:
-            self.angle += self.rotation_velocity
-        elif right:
-            self.angle -= self.rotation_velocity
-            
-    def draw(self, SCREEN):
+    def draw(self):
         blit_rotate_center(SCREEN, self.image, (self.x, self.y), self.angle)
         
     def move_forward(self):
@@ -74,7 +68,7 @@ class AircraftFighter(pg.sprite.Sprite):
             return True 
         if self.y - self.vel <= 0 : # collide top  
             return True 
-        if self.y + self.vel + PLANE_WIDTH >= HEIGTH: # collide down
+        if self.y + self.vel + PLANE_WIDTH >= HEIGHT: # collide down
             return True 
         
     
@@ -113,7 +107,7 @@ class Weapons():
             return True 
         if self.y - self.vel <= 0 : # collide top  
             return True 
-        if self.y + self.vel + BULLET_WIDTH >= HEIGTH: # collide down
+        if self.y + self.vel + BULLET_WIDTH >= HEIGHT: # collide down
             return True 
 
 

@@ -1,12 +1,12 @@
 import random
 import pygame as pg
-from settings import *
+from settings import BULLET_HIT_SOUND, CONTROLLER_J1, CONTROLLER_J2, HEIGHT, MISSILE_HIT_SOUND, SCREEN, BACKGROUND_IMG, WHITE, RED, GREEN, WIDTH, WINNER_FONT
 
 # --------------------------------------------------------------              
 #        ----------- Drawing of the game -----------------  
 # --------------------------------------------------------------  
 # ------ Background ------
-def draw_bg(SCREEN):
+def draw_bg():
     SCREEN.blit(BACKGROUND_IMG, (0,0))
 
 # ------ Health Bar ------
@@ -24,7 +24,7 @@ def draw_text(text, font, text_col, x, y):
 # ------ Draw winner text on the screen ------
 def draw_winner(text):
     draw_text = WINNER_FONT.render(text, 1, WHITE)
-    SCREEN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGTH/2 - draw_text.get_height()/2))
+    SCREEN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGHT/2 - draw_text.get_height()/2))
     pg.display.update()
     pg.time.delay(10000)
     
@@ -32,7 +32,7 @@ def draw_winner(text):
 # --------------------------------------------------------------               
 #          -----------ROTATION IMG--------------  
 # --------------------------------------------------------------
-def blit_rotate_center(SCREEN, image, top_left, angle):
+def blit_rotate_center(image, top_left, angle):
     rotated_image = pg.transform.rotate(image, angle)
     rotation_rect = rotated_image.get_rect(center=image.get_rect(topleft=top_left).center)
     SCREEN.blit(rotated_image, rotation_rect)
@@ -41,7 +41,7 @@ def blit_rotate_center(SCREEN, image, top_left, angle):
 # --------------------------------------------------------------               
 #          ----------- J1 and J2 Movement ----------------  
 # --------------------------------------------------------------
-def J1_handle_movement(player1):
+def j1_handle_movement(player1):
     keys_pressed = pg.key.get_pressed()
     player_moved = False
     #--------- rotation left ------------
@@ -69,7 +69,7 @@ def J1_handle_movement(player1):
         if player1.collide_map() and pg.time.delay(2000):
             player1.reset()
                         
-def J2_handle_movement(player2):
+def j2_handle_movement(player2):
     keys_pressed = pg.key.get_pressed()
     player_moved = False
     #--------- rotation left ------------
@@ -100,7 +100,7 @@ def J2_handle_movement(player2):
 # --------------------------------------------------------------               
 #          ----------- J1 and J2 JOYSTICK --------------  
 # --------------------------------------------------------------
-def J1_Joystick_movement(player1):
+def j1_joystick_movement(player1):
     axe_x_joy_left = round(CONTROLLER_J1.get_axis(0),2)
     axe_y_joy_right = round(CONTROLLER_J1.get_axis(3),2)
     #---------Left/Right------------
@@ -115,7 +115,7 @@ def J1_Joystick_movement(player1):
     if axe_y_joy_right > 0.1:
         player1.reduce_speed()
                           
-def J2_Joystick_movement(player2):    
+def j2_joystick_movement(player2):    
     axe_x_joy_left = round(CONTROLLER_J2.get_axis(0),2)
     axe_y_joy_right = round(CONTROLLER_J2.get_axis(3),2)
     #---------Left/Right------------
@@ -133,56 +133,32 @@ def J2_Joystick_movement(player2):
 # ---------------------------------------------------------------------------                 
 #          -----------Bullets/Missiles moves and collisions ------------  
 # ---------------------------------------------------------------------------    
-def handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, player2):           
-    # ------------------ Bullets J1 --------------------
-    for bullet in J1_bullets:
-        bullet.move_weapons()
-        if bullet.rectangle.colliderect(player2.rect):
-            J1_bullets.remove(bullet)
-            #-------health and score--------
-            player2.health -= bullet.damage
-            player1.score += bullet.point * random.randint(1,5)
-            BULLET_HIT_SOUND.play()
-            BULLET_HIT_SOUND.set_volume(0.3)
-        elif bullet.collide_map():
-            J1_bullets.remove(bullet)
-            
-    # ----------------- Missiles J1 --------------------
-    for missile in J1_missiles:
-        missile.move_weapons()
-        if missile.rectangle.colliderect(player2.rect):
-            J1_missiles.remove(missile)
-            #-------health and score--------
-            player2.health -= missile.damage
-            player1.score += missile.point * random.randint(1,5)
-            MISSILE_HIT_SOUND.play()
-            MISSILE_HIT_SOUND.set_volume(0.3)
-            
-        elif missile.collide_map():
-            J1_missiles.remove(missile)
+def handle_weapons(j1_bullets, j1_missiles, j2_bullets, j2_missiles, player1, player2):
+    handle_bullets(j1_bullets, player2, player1)
+    handle_missiles(j1_missiles, player2, player1)
+    handle_bullets(j2_bullets, player1, player2)
+    handle_missiles(j2_missiles, player1, player2)
 
-    # ------------------ Bullets J2 --------------------
-    for bullet in J2_bullets:
+def handle_bullets(bullets, target_player, shooter_player):
+    for bullet in bullets:
         bullet.move_weapons()
-        if bullet.rectangle.colliderect(player1.rect):
-            J2_bullets.remove(bullet)
-            #-------health and score--------
-            player1.health -= bullet.damage
-            player2.score += bullet.point * random.randint(1,5)
+        if bullet.rectangle.colliderect(target_player.rect):
+            bullets.remove(bullet)
+            target_player.health -= bullet.damage
+            shooter_player.score += bullet.point * random.randint(1, 5)
             BULLET_HIT_SOUND.play()
             BULLET_HIT_SOUND.set_volume(0.3)
         elif bullet.collide_map():
-            J2_bullets.remove(bullet)
-            
-    # ----------------- Missiles J2 --------------------
-    for missile in J2_missiles:
+            bullets.remove(bullet)
+
+def handle_missiles(missiles, target_player, shooter_player):
+    for missile in missiles:
         missile.move_weapons()
-        if missile.rectangle.colliderect(player1.rect):
-            J2_missiles.remove(missile)
-            #-------health and score--------
-            player1.health -= missile.damage
-            player2.score += missile.point * random.randint(1,5)
+        if missile.rectangle.colliderect(target_player.rect):
+            missiles.remove(missile)
+            target_player.health -= missile.damage
+            shooter_player.score += missile.point * random.randint(1, 5)
             MISSILE_HIT_SOUND.play()
             MISSILE_HIT_SOUND.set_volume(0.3)
         elif missile.collide_map():
-            J2_missiles.remove(missile)
+            missiles.remove(missile)
