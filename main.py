@@ -23,12 +23,12 @@ def mainMenu():
         'assets/images/wallpaper/bg6.png')
     mainMenuTheme.title_background_color = (0, 0, 0, 0)
     mainMenuTheme.title_font = MENU_FONT
-    mainMenuTheme.title_offset = (WIDTH/3, ((HEIGTH-HEIGTH) + 30 ))
+    mainMenuTheme.title_offset = (WIDTH/3, ((HEIGHT-HEIGHT) + 30 ))
     mainMenuTheme.widget_font = MENU_FONT
     mainMenuTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
     # instantiation
     mainMenu = pygame_menu.Menu(
-        'T O P G U N   F i g h t e r s', WIDTH, HEIGTH, theme=mainMenuTheme)
+        'T O P G U N   F i g h t e r s', WIDTH, HEIGHT, theme=mainMenuTheme)
     # add widget
     mainMenu.add.image(image_path='assets/images/TOPGUN.png', scale=(0.5, 0.5), scale_smooth=True, float=False)
     mainMenu.add.button('P l a y', game, font_color=RED)
@@ -52,11 +52,11 @@ def instructionMenu():
     instructionMenuTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
     instructionMenuTheme.title_font = MENU_FONT
     instructionMenuTheme.title_color = WHITE
-    instructionMenuTheme.title_offset = (WIDTH/2.45, ((HEIGTH-HEIGTH) + 30 ))
+    instructionMenuTheme.title_offset = (WIDTH/2.45, ((HEIGHT-HEIGHT) + 30 ))
     instructionMenuTheme.widget_font = SCORE_FONT
     instructionMenuTheme.button_font = MENU_FONT
     # instantiation of the menu
-    instructionMenu = pygame_menu.Menu('Instruction', WIDTH, HEIGTH, theme=instructionMenuTheme)
+    instructionMenu = pygame_menu.Menu('Instruction', WIDTH, HEIGHT, theme=instructionMenuTheme)
     # add widget
     instructionMenu.add.vertical_margin(50)
     instructionMenu.add.label(HELP_TITLE, font_color=BLUE, align=pygame_menu.locals.ALIGN_CENTER)
@@ -82,11 +82,11 @@ def menuScore():
     ScoreMenuTheme.title_background_color = (0, 0, 0, 0)
     ScoreMenuTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
     ScoreMenuTheme.title_font = MENU_FONT
-    ScoreMenuTheme.title_offset = (WIDTH/2.25, ((HEIGTH-HEIGTH) + 30 ))
+    ScoreMenuTheme.title_offset = (WIDTH/2.25, ((HEIGHT-HEIGHT) + 30 ))
     ScoreMenuTheme.widget_font = SCORE_FONT
     
     # instantiation of the menu
-    ScoreMenu = pygame_menu.Menu('S C O R E', WIDTH, HEIGTH, theme=ScoreMenuTheme)
+    ScoreMenu = pygame_menu.Menu('S C O R E', WIDTH, HEIGHT, theme=ScoreMenuTheme)
     
     # add widget
     ScoreMenu.add.label(getScores())  #ingrogress
@@ -107,10 +107,10 @@ def optionMenu():
     optionTheme.title_background_color = (0, 0, 0, 0)
     optionTheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_SIMPLE
     optionTheme.title_font = MENU_FONT
-    optionTheme.title_offset = (WIDTH/2.3, ((HEIGTH-HEIGTH) + 30 ))
+    optionTheme.title_offset = (WIDTH/2.3, ((HEIGHT-HEIGHT) + 30 ))
     optionTheme.widget_font = MENU_FONT
 
-    Option_Menu = pygame_menu.Menu('O P T I O N', WIDTH, HEIGTH, theme=optionTheme)
+    Option_Menu = pygame_menu.Menu('O P T I O N', WIDTH, HEIGHT, theme=optionTheme)
     
     # in progress
     Option_Menu.add.button('R E T U R N', mainMenu, font_color=RED, padding=(20, 20, 20, 20), border_width=0)
@@ -209,16 +209,21 @@ def game():
         draw_text("P.1", PLAYER_FONT, RED, player1.x, player1.y)
         draw_text("P.2", PLAYER_FONT, BLUE, player2.x, player2.y)
             
-        #---------Draw the Aircrafts-----------------
+        #---------Draw the Aircraft-----------------
         Player1.draw(player1,SCREEN)
         Player2.draw(player2,SCREEN)
         
         #---------Setup the player's movement--------
         J1_handle_movement(player1)
         J2_handle_movement(player2)
-        J1_Joystick_movement(player1)
-        J2_Joystick_movement(player2)
-     
+        
+        if pg.joystick.get_count() > 0:
+            J1_Joystick_movement(player1)
+            
+        if pg.joystick.get_count() > 1:
+            J1_Joystick_movement(player1)
+            J2_Joystick_movement(player2)
+        
         # --------Setup the weapon's movement and collision-----------
         handle_weapons(J1_bullets, J1_missiles, J2_bullets, J2_missiles, player1, player2)
         

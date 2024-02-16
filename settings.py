@@ -3,12 +3,12 @@ import pygame as pg
 #          ----------- GAME SETTINGS -----------------  
 # --------------------------------------------------------------   
 WIDTH = 1024 # 16 * 64 / 32 * 32 / 64 * 16
-HEIGTH = 768 # 16 * 48 / 32 * 24 / 64 * 12
+HEIGHT = 768 # 16 * 48 / 32 * 24 / 64 * 12
 GAME_NAME = "TopGun_Fighter"
-SCREEN = pg.display.set_mode((WIDTH,HEIGTH))
+SCREEN = pg.display.set_mode((WIDTH,HEIGHT))
 TITLE =  pg.display.set_caption(GAME_NAME)
-BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGTH))
-BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGTH))
+BACKGROUND_IMG = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg55.png'), (WIDTH, HEIGHT))
+BACKGROUND_MENU = pg.transform.scale(pg.image.load('assets/images/wallpaper/bg6.png'), (WIDTH, HEIGHT))
 TOP_GUN_LOGO = pg.transform.scale(pg.image.load('assets/images/TOPGUN.png'), (100, 100))
 FPS = 60
 
@@ -57,16 +57,26 @@ BUTTON_R1 = 10
 JOYSTICK_COUNT = pg.joystick.get_count()
 print("Number of joysticks: " + str(JOYSTICK_COUNT))
 
-# =============Contoller=================
-CONTROLLER_J1 = pg.joystick.Joystick(0)
-CONTROLLER_J2 = pg.joystick.Joystick(1)
-CONTROLLER_J1.init()    
-CONTROLLER_J2.init()
-print("Player 1 controller : " + str(CONTROLLER_J1))
-print("Player 1 controller ID : " + str(CONTROLLER_J1.get_id()))
-print("Player 2 controller : " + str(CONTROLLER_J2))
-print("Player 2 controller ID : " + str(CONTROLLER_J2.get_id()))
-        
+if JOYSTICK_COUNT == 0:
+    print("No joystick detected")
+    CONTROLLER_J1 = None
+    CONTROLLER_J2 = None
+elif JOYSTICK_COUNT == 1:
+    CONTROLLER_J1 = pg.joystick.Joystick(0)
+    CONTROLLER_J1.init()
+    print("Player 1 controller : " + str(CONTROLLER_J1))
+    print("Player 1 controller ID : " + str(CONTROLLER_J1.get_id()))
+    CONTROLLER_J2 = None
+elif JOYSTICK_COUNT == 2:
+    CONTROLLER_J1 = pg.joystick.Joystick(0)
+    CONTROLLER_J1.init()
+    print("Player 1 controller : " + str(CONTROLLER_J1))
+    print("Player 1 controller ID : " + str(CONTROLLER_J1.get_id()))
+    CONTROLLER_J2 = pg.joystick.Joystick(1)
+    CONTROLLER_J2.init()
+    print("Player 2 controller : " + str(CONTROLLER_J2))
+    print("Player 2 controller ID : " + str(CONTROLLER_J2.get_id()))
+            
 
 
 # --------------------------------------------------------------               
@@ -86,7 +96,7 @@ AIRCRAFT_SU28_IMG = pg.transform.scale(pg.image.load('assets/images/planes/SU-28
 AIRCRAFT_SU47_IMG = pg.transform.scale(pg.image.load('assets/images/planes/SU-47.png'), (PLANE_WIDTH, PLANE_HEIGHT))
 AIRCRAFT_SU57_IMG = pg.transform.scale(pg.image.load('assets/images/planes/SU-57.png'), (PLANE_WIDTH, PLANE_HEIGHT))
 
-AIRCRAFTS_IMGS = [
+AIRCRAFT_IMGS = [
     AIRCRAFT_F2_IMG,
     AIRCRAFT_F14_IMG,
     AIRCRAFT_F18_IMG,
