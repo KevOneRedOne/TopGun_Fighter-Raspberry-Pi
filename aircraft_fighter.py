@@ -9,7 +9,7 @@ from utils import blit_rotate_center
 # --------------------------------------------------------------  
 class AircraftFighter(pg.sprite.Sprite):
     def __init__(self, max_velocity,rotation_velocity):
-        self.image = AIRCRAFTS_IMGS[random.randint(0,7)]
+        self.image = AIRCRAFT_IMGS[random.randint(0,7)]
         self.rect = self.image.get_rect()
         self.rect.x , self.rect.y = self.START_POSITION 
         self.max_velocity = max_velocity
@@ -74,7 +74,7 @@ class AircraftFighter(pg.sprite.Sprite):
             return True 
         if self.y - self.vel <= 0 : # collide top  
             return True 
-        if self.y + self.vel + PLANE_WIDTH >= HEIGTH: # collide down
+        if self.y + self.vel + PLANE_WIDTH >= HEIGHT: # collide down
             return True 
         
     
@@ -113,7 +113,7 @@ class Weapons():
             return True 
         if self.y - self.vel <= 0 : # collide top  
             return True 
-        if self.y + self.vel + BULLET_WIDTH >= HEIGTH: # collide down
+        if self.y + self.vel + BULLET_WIDTH >= HEIGHT: # collide down
             return True 
 
 

@@ -24,7 +24,7 @@ def draw_text(text, font, text_col, x, y):
 # ------ Draw winner text on the screen ------
 def draw_winner(text):
     draw_text = WINNER_FONT.render(text, 1, WHITE)
-    SCREEN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGTH/2 - draw_text.get_height()/2))
+    SCREEN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGHT/2 - draw_text.get_height()/2))
     pg.display.update()
     pg.time.delay(10000)
     
@@ -101,8 +101,8 @@ def J2_handle_movement(player2):
 #          ----------- J1 and J2 JOYSTICK --------------  
 # --------------------------------------------------------------
 def J1_Joystick_movement(player1):
-    axe_x_joy_left = round(CONTROLLER_J1.get_axis(0),2)
-    axe_y_joy_right = round(CONTROLLER_J1.get_axis(3),2)
+    axe_x_joy_left = round(pg.joystick.Joystick(0).get_axis(0),2)
+    axe_y_joy_right = round(pg.joystick.Joystick(0).get_axis(3),2)
     #---------Left/Right------------
     if axe_x_joy_left < -0.1:
         player1.rotate(left=True)
@@ -116,8 +116,8 @@ def J1_Joystick_movement(player1):
         player1.reduce_speed()
                           
 def J2_Joystick_movement(player2):    
-    axe_x_joy_left = round(CONTROLLER_J2.get_axis(0),2)
-    axe_y_joy_right = round(CONTROLLER_J2.get_axis(3),2)
+    axe_x_joy_left = round(pg.joystick.Joystick(1).get_axis(0),2)
+    axe_y_joy_right = round(pg.joystick.Joystick(1).get_axis(3),2)
     #---------Left/Right------------
     if axe_x_joy_left < -0.1:
         player2.rotate(left=True)
